@@ -1,18 +1,21 @@
 import threading
 from threading import Thread
 import multiprocessing
-import logging
 from queue import Queue
 import time
 from bs4 import BeautifulSoup
 import requests
-logging.basicConfig(format='%(levelname)s - %(asctime)s.%(msecs)03d: %(message)s',datefmt='%H:%M:%S', level=logging.INFO)
 
 
-def log_display(message):
+def msg_display(message):
     thread = threading.current_thread().name
     process = multiprocessing.current_process().name
-    logging.info(f'{process}\{thread}: {message}')
+    print('-------------')
+    print("Thread: ",thread)
+    print("Process: ",process)
+    print("Message: ", message)
+    print('-------------')
+    #logging.info(f'{process}\{thread}: {message}')
 
 
 def producer(queue,finished,urls,max_size):
@@ -26,13 +29,14 @@ def producer(queue,finished,urls,max_size):
             if (queue.qsize()<=max_size):
                 reqs = requests.get(urls[i])
                 queue.put(reqs)
-                log_display(f'Producing and extracting URL {i}: {urls[i]}')
+                msg_display(f'Producing and extracting URL {i}: {urls[i]}')
             else:
                 print("QUEUE OVERLOAD")
+                # Trimming oldest queue entry if queue size is going over capacity.
                 queue.get()
                 reqs = requests.get(urls[i])
                 queue.put(reqs)
-                log_display(f'Producing and extracting URL {i}: {urls[i]}')
+                msg_display(f'Producing and extracting URL {i}: {urls[i]}')
 
         except:
             # The URLs are incorrectly formatted as a result of which, the HTML configuration cannot be extracted.
@@ -40,7 +44,7 @@ def producer(queue,finished,urls,max_size):
             
 
     finished.put(True)
-    log_display('Finished')
+    msg_display('Finished')
 
 def consumer(work,finished):
     count = 0
@@ -64,7 +68,7 @@ def consumer(work,finished):
                 error_flag = 1
             
             # Only first 5 hyperlinks for a URL's HTML config are displayed for ease of reading in command line    
-            log_display(f'Consuming and extracting hyperlinks from URL {count}:\n {hyperlinks[:5]}\n')
+            msg_display(f'Consuming and extracting hyperlinks from URL {count}:\n {hyperlinks[:5]}\n')
             
             # All the hyperlinks found in a URL's HTML config are written to a file
             filename = 'hyperlink_dump'+str(count)+'.txt'
@@ -78,7 +82,7 @@ def consumer(work,finished):
             q = finished.get()
             if q == True:
                 break
-        log_display('Finished')
+    msg_display('Finished')
 
 
 def main():
@@ -102,11 +106,11 @@ def main():
     cons.start()
 
     prod.join()
-    log_display('Producer has completed production')
+    msg_display('Producer has completed production')
 
     cons.join()
-    log_display('Consumer has completed consumption')
-    log_display('Producer/Consumer web link extractor demonstration has been completed')
+    msg_display('Consumer has completed consumption')
+    msg_display('Producer/Consumer web link extractor demonstration has been completed')
     print("END OF DEMO")
 
 if __name__ == "__main__":
