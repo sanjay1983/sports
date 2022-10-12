@@ -15,12 +15,10 @@ def msg_display(message):
     print("Process: ",process)
     print("Message: ", message)
     print('-------------')
-    #logging.info(f'{process}\{thread}: {message}')
 
 
 def producer(queue,finished,urls,max_size):
     finished.put(False)
-    #finished = 'FALSE'
     for i in range(len(urls)):
 
         try:
