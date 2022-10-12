@@ -10,7 +10,7 @@ queue-based producer-consumer setup. The output on the command line shows the en
 
 ## Discussions and thought process
 
-1. A list of 8 URL's have been defined in a list in the main() function. The queue size has been set at 3.
+1. A list of 8 URL's have been defined in a list in the main() function. The maximum queue size has been set at 3. These are customizable.
 2. The URLs are received by the producer function, which then extracts the respective HTML configurations for each URL and adds these to 
 a queue. Simultaneously, the consumer function consumes these queue values and extracts the hyperlinks present in each URL's HTML representation.
 It prints 5 hyperlinks for each URL on the command line for readability purposes, and outputs all the hyperlinks to individual text files which are
