@@ -20,10 +20,10 @@ to directly add a new item to the queue as long as the queue_size before adding 
 has been written to remove an element from the queue. By default, the removed element will be the oldest element as this is a FIFO queue representation.
 4. The Queue() class by default ensures internal locking which means that 2 threads do not interfere while using the 'get' function. This is important as
 in case the queue size balloons, the element that is being trimmed out by one thread must not be simultaneously accessed by the other thread. As it happens,
-to avoid this kind of a race condition, the Queue() class inherently implements blocking new entries (get(block=True)) until a free slot becomes available.
+to avoid this kind of a race condition, the Queue() class inherently implements blocking new entries (put(block=True)) until a free slot becomes available.
 Since this is already implemented, it means that the queue is never at risk of overflowing since the queue will wait. Old elements won't need to
 be removed. However, this could cost crucial seconds in the real-world extraction of data.
-5. To overcome this, we can override this block and set get((block=False)) which means that we are free to remove the oldest elements of an overloaded
+5. To overcome this, we can override this block and set put((block=False)) which means that we are free to remove the oldest elements of an overloaded
 queue as discussed in step 3. Again, we are not at risk of thread interference while removing the element because internalthread locking is already 
 implemented.
 6. The final point worth mentioning is the risk of a deadlock, a condition in which 2 threads are blocked forever because they are waiting for each other.
