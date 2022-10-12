@@ -87,7 +87,7 @@ def consumer(work,finished):
 
 def main():
     
-    # Add desired URL's to this list
+    # Add desired URLs to this list
     urls = ['https://txodds.net',
             'https://www.espncricinfo.com',
             'https://www.premierleague.com',
