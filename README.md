@@ -24,7 +24,7 @@ to avoid this kind of a race condition, the Queue() class inherently implements 
 Since this is already implemented, it means that the queue is never at risk of overflowing since the queue will wait. Old elements won't need to
 be removed. However, this could cost crucial seconds in the real-world extraction of data.
 5. To overcome this, we can override this block and set put((block=False)) which means that we are free to remove the oldest elements of an overloaded
-queue as discussed in step 3. Again, we are not at risk of thread interference while removing the element because internalthread locking is already 
+queue as discussed in step 3. Again, we are not at risk of thread interference while removing the element because internal thread locking is already 
 implemented.
 6. The final point worth mentioning is the risk of a deadlock, a condition in which 2 threads are blocked forever because they are waiting for each other.
 I believe I encountered this once while doing the task. Other runs were smooth. If a deadlock does happen, then it's best to kill the execution and re-run,
